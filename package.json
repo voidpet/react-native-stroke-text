@@ -1,15 +1,16 @@
 {
-  "name": "@charmy.tech/react-native-stroke-text",
+  "name": "@voidpet/react-native-stroke-text",
   "version": "1.2.3",
   "description": "React Native Stroke/Outline Text",
   "main": "build/index.js",
-  "source": "./src/",
-  "author": "Charmy Inc. (https://github.com/charmy)",
+  "react-native": "src/index.tsx",
+  "source": "src/index.tsx",
+  "author": "Voidpet (https://github.com/voidpet)",
   "license": "MIT",
-  "homepage": "https://github.com/charmy/react-native-stroke-text#readme",
-  "repository": "https://github.com/charmy/react-native-stroke-text",
+  "homepage": "https://github.com/voidpet/react-native-stroke-text#readme",
+  "repository": "https://github.com/voidpet/react-native-stroke-text",
   "bugs": {
-    "url": "https://github.com/charmy/react-native-stroke-text"
+    "url": "https://github.com/voidpet/react-native-stroke-text"
   },
   "keywords": [
     "react-native",
@@ -17,8 +18,16 @@
     "text",
     "outline"
   ],
+  "codegenConfig": {
+    "name": "RNStrokeTextSpec",
+    "type": "components",
+    "jsSrcsDir": "src"
+  },
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "release:patch": "yarn build && npm version patch && npm publish --access public && git push && git push --tags",
+    "release:minor": "yarn build && npm version minor && npm publish --access public && git push && git push --tags",
+    "release:major": "yarn build && npm version major && npm publish --access public && git push && git push --tags"
   },
   "devDependencies": {
     "@babel/core": "^7.21.3",
@@ -28,5 +37,6 @@
     "@types/react-native": "^0.71.3",
     "prettier": "^2.8.5",
     "typescript": "^5.0.2"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

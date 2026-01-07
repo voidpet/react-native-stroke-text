@@ -1,6 +1,6 @@
 # React Native Stroke/Outline Text
 
-[![npm version](https://badge.fury.io/js/@charmy.tech%2Freact-native-stroke-text.svg)](https://badge.fury.io/js/@charmy.tech%2Freact-native-stroke-text)
+[![npm version](https://badge.fury.io/js/@voidpet%2Freact-native-stroke-text.svg)](https://badge.fury.io/js/@voidpet%2Freact-native-stroke-text)
 
 Allows you to add stylish text with stroke effects to your mobile applications. It is perfect for creating visually
 appealing text elements with outline effects.
@@ -12,9 +12,9 @@ appealing text elements with outline effects.
 ## Installation
 
 ```bash
-npm install @charmy.tech/react-native-stroke-text
+npm install @voidpet/react-native-stroke-text
 # or
-yarn add @charmy.tech/react-native-stroke-text
+yarn add @voidpet/react-native-stroke-text
 ```
 
 ## Android
@@ -32,7 +32,7 @@ Here's a quick example to get you started with StrokeText:
 
 ```jsx
 import React from "react";
-import { StrokeText } from "@charmy.tech/react-native-stroke-text";
+import { StrokeText } from "@voidpet/react-native-stroke-text";
 import { View } from "react-native";
 
 export default function Screen() {
