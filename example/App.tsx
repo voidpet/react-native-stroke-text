@@ -10,8 +10,8 @@ const COLORS = {
 };
 
 export default function App() {
-  const [loaded] = useFonts({
-    "Inter-Bold": require("./assets/Inter-Bold.ttf"),
+  const [loaded, fontError] = useFonts({
+    Saira: require("./assets/Saira_600SemiBold.ttf"),
   });
   const [count, setCount] = useState(1);
   const [mountKey, setMountKey] = useState(0);
@@ -19,9 +19,15 @@ export default function App() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCount((value) => (value >= 60 ? 1 : value + 1));
-    }, 500);
+    }, 250);
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    if (fontError) {
+      console.error("Failed to load the Saira QA font", fontError);
+    }
+  }, [fontError]);
 
   if (!loaded) {
     return null;
@@ -43,7 +49,7 @@ export default function App() {
             color={COLORS.fill}
             strokeColor={COLORS.stroke}
             strokeWidth={5}
-            fontFamily="Inter-Bold"
+            fontFamily="Saira"
           />
         </Section>
 
@@ -55,7 +61,7 @@ export default function App() {
               color="#A9F0D1"
               strokeColor="#173A33"
               strokeWidth={3}
-              fontFamily="Inter-Bold"
+              fontFamily="Saira"
             />
             <Text style={styles.marker}>← frame should hug text</Text>
           </View>
@@ -71,7 +77,7 @@ export default function App() {
                 color="#FFFFFF"
                 strokeColor="#EA4C89"
                 strokeWidth={strokeWidth}
-                fontFamily="Inter-Bold"
+                fontFamily="Saira"
               />
             ))}
           </View>
@@ -88,7 +94,7 @@ export default function App() {
                 strokeColor="#253563"
                 strokeWidth={2}
                 align={align}
-                fontFamily="Inter-Bold"
+                fontFamily="Saira"
               />
             </View>
           ))}
@@ -105,7 +111,7 @@ export default function App() {
               strokeWidth={2}
               numberOfLines={1}
               ellipsis
-              fontFamily="Inter-Bold"
+              fontFamily="Saira"
             />
           </View>
         </Section>
@@ -117,6 +123,49 @@ export default function App() {
             color="#D7F7A8"
             strokeColor="#304A16"
             strokeWidth={3}
+          />
+        </Section>
+
+        <Section title="Default fontSize (14)">
+          <StrokeText text="DEFAULT 14 FITS" color="#FFE8A3" strokeColor="#624B0F" strokeWidth={2} fontFamily="Saira" />
+        </Section>
+
+        <Section title="Fractional pixels: 17 / 2">
+          <StrokeText
+            text="FRACTIONAL PX FITS"
+            fontSize={17}
+            color="#BCE8FF"
+            strokeColor="#17445A"
+            strokeWidth={2}
+            fontFamily="Saira"
+          />
+        </Section>
+
+        <Section title="Two-line tail ellipsis">
+          <View style={styles.narrowSample}>
+            <StrokeText
+              text="THIS WRAPPING LABEL MUST SHOW TWO LINES AND ELLIPSIZE AT THE TAIL"
+              width={140}
+              fontSize={18}
+              color="#F1C7FF"
+              strokeColor="#512361"
+              strokeWidth={2}
+              numberOfLines={2}
+              ellipsis
+              fontFamily="Saira"
+            />
+          </View>
+        </Section>
+
+        <Section title="Negative lines (-2) = unlimited">
+          <StrokeText
+            text={"NEGATIVE LINES\nRENDER ALL\nTHREE"}
+            fontSize={18}
+            color="#C9FFD8"
+            strokeColor="#1D5730"
+            strokeWidth={2}
+            numberOfLines={-2}
+            fontFamily="Saira"
           />
         </Section>
       </View>
@@ -197,6 +246,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 7,
     width: 220,
+  },
+  narrowSample: {
+    backgroundColor: "#12111B",
+    borderColor: "#413C54",
+    borderWidth: 1,
+    width: 140,
   },
   button: {
     marginTop: 22,

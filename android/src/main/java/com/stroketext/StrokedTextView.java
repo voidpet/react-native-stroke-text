@@ -16,6 +16,7 @@ public class StrokedTextView extends AppCompatTextView {
 
     public StrokedTextView(Context context) {
         super(context);
+        setFontSize(14f);
     }
 
     public void setStrokeColor(int color) {
@@ -30,11 +31,12 @@ public class StrokedTextView extends AppCompatTextView {
     }
 
     public void setFontSize(float fontSize) {
-        setTextSize(TypedValue.COMPLEX_UNIT_DIP, fontSize);
+        float fontSizePx = (float) Math.ceil(getScaledSize(fontSize));
+        setTextSize(TypedValue.COMPLEX_UNIT_PX, fontSizePx);
     }
 
     public void setStrokeWidth(float width) {
-        float newWidth = getScaledSize(width);
+        float newWidth = getScaledSize(Math.max(0f, width));
         if (this.strokeWidthPx != newWidth) {
             this.strokeWidthPx = newWidth;
             int strokeInsetPx = (int) Math.ceil(newWidth);

@@ -47,7 +47,7 @@ class StrokeTextShadowNode extends LayoutShadowNode implements YogaMeasureFuncti
 
     @ReactProp(name = "strokeWidth")
     public void setStrokeWidth(float strokeWidth) {
-        this.strokeWidth = strokeWidth;
+        this.strokeWidth = Math.max(0, strokeWidth);
         dirty();
     }
 
@@ -71,7 +71,7 @@ class StrokeTextShadowNode extends LayoutShadowNode implements YogaMeasureFuncti
 
     @ReactProp(name = "numberOfLines")
     public void setNumberOfLines(int numberOfLines) {
-        this.numberOfLines = numberOfLines;
+        this.numberOfLines = Math.max(0, numberOfLines);
         dirty();
     }
 
@@ -89,8 +89,8 @@ class StrokeTextShadowNode extends LayoutShadowNode implements YogaMeasureFuncti
         }
 
         Typeface typeface = FontUtil.getFont(context, fontFamily);
-        float scaledFontSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, fontSize, context.getResources().getDisplayMetrics());
-        float strokeWidthPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, strokeWidth, context.getResources().getDisplayMetrics());
+        float scaledFontSize = (float) Math.ceil(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, fontSize, context.getResources().getDisplayMetrics()));
+        float strokeWidthPx = (float) Math.ceil(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, strokeWidth, context.getResources().getDisplayMetrics()));
 
         textPaint.setTypeface(typeface);
         textPaint.setTextSize(scaledFontSize);
@@ -120,16 +120,12 @@ class StrokeTextShadowNode extends LayoutShadowNode implements YogaMeasureFuncti
         }
 
         int layoutWidth = (int) Math.ceil(contentWidthPx);
-        CharSequence ellipsizedText = ellipsis
-                ? TextUtils.ellipsize(text, textPaint, layoutWidth, TextUtils.TruncateAt.END)
-                : text;
-
-        StaticLayout textLayout = new StaticLayout(ellipsizedText, textPaint, layoutWidth, alignment, 1.0f, 0.0f, true);
-        if (numberOfLines > 0 && numberOfLines < textLayout.getLineCount()) {
-            int lineEnd = textLayout.getLineEnd(numberOfLines - 1);
-            CharSequence trimmed = ellipsizedText.subSequence(0, lineEnd);
-            textLayout = new StaticLayout(trimmed, textPaint, layoutWidth, alignment, 1.0f, 0.0f, true);
-        }
+        StaticLayout textLayout = StaticLayout.Builder.obtain(text, 0, text.length(), textPaint, layoutWidth)
+                .setAlignment(alignment)
+                .setIncludePad(true)
+                .setMaxLines(numberOfLines > 0 ? numberOfLines : Integer.MAX_VALUE)
+                .setEllipsize(ellipsis ? TextUtils.TruncateAt.END : null)
+                .build();
 
         float heightPx;
         if (heightMode == YogaMeasureMode.EXACTLY) {

@@ -1,6 +1,7 @@
 #include "StrokeTextShadowNode.h"
 
 #include <algorithm>
+#include <cmath>
 
 #include <react/renderer/attributedstring/AttributedString.h>
 #include <react/renderer/attributedstring/AttributedStringBox.h>
@@ -41,14 +42,18 @@ Size StrokeTextShadowNode::measureContent(
   attributedString.setBaseTextAttributes(textAttributes);
 
   auto paragraphAttributes = ParagraphAttributes{};
-  paragraphAttributes.maximumNumberOfLines = props.numberOfLines;
+  paragraphAttributes.maximumNumberOfLines = std::max(0, props.numberOfLines);
   paragraphAttributes.includeFontPadding = true;
   if (props.ellipsis) {
     paragraphAttributes.ellipsizeMode = EllipsizeMode::Tail;
   }
 
-  const auto strokeInset = std::max<Float>(0, props.strokeWidth);
-  const auto totalStrokeInset = strokeInset * 2;
+  const auto pointScale = layoutContext.pointScaleFactor;
+  const auto insetDp =
+      std::ceil(std::max<Float>(0, props.strokeWidth) * pointScale) /
+      pointScale;
+  // Android pads ceil(strokeWidthPx) on each side, which is exactly insetDp.
+  const auto totalStrokeInset = 2 * insetDp;
 
   auto textConstraints = layoutConstraints;
   textConstraints.minimumSize = Size{0, 0};
