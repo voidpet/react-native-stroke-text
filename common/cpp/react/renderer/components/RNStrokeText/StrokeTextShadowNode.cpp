@@ -49,9 +49,11 @@ Size StrokeTextShadowNode::measureContent(
   }
 
   const auto pointScale = layoutContext.pointScaleFactor;
-  const auto insetDp =
-      std::ceil(std::max<Float>(0, props.strokeWidth) * pointScale) /
-      pointScale;
+  const auto clampedStroke = std::max<Float>(0, props.strokeWidth);
+  // Yoga uses pointScale 0 to mean "no pixel rounding"; guard the division.
+  const auto insetDp = (std::isfinite(pointScale) && pointScale > 0)
+      ? std::ceil(clampedStroke * pointScale) / pointScale
+      : clampedStroke;
   // Android pads ceil(strokeWidthPx) on each side, which is exactly insetDp.
   const auto totalStrokeInset = 2 * insetDp;
 

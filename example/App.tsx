@@ -130,13 +130,13 @@ export default function App() {
           <StrokeText text="DEFAULT 14 FITS" color="#FFE8A3" strokeColor="#624B0F" strokeWidth={2} fontFamily="Saira" />
         </Section>
 
-        <Section title="Fractional pixels: 17 / 2">
+        <Section title="Fractional pixels: 17.25 / 2.25">
           <StrokeText
             text="FRACTIONAL PX FITS"
-            fontSize={17}
+            fontSize={17.25}
             color="#BCE8FF"
             strokeColor="#17445A"
-            strokeWidth={2}
+            strokeWidth={2.25}
             fontFamily="Saira"
           />
         </Section>

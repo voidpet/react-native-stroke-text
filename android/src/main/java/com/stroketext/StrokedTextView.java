@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.text.TextPaint;
 import android.util.TypedValue;
 import androidx.appcompat.widget.AppCompatTextView;
+import com.facebook.react.uimanager.PixelUtil;
 
 public class StrokedTextView extends AppCompatTextView {
 
@@ -16,6 +17,11 @@ public class StrokedTextView extends AppCompatTextView {
 
     public StrokedTextView(Context context) {
         super(context);
+        // Normalize theme-derived TextView settings that measurement assumes:
+        // both shadow-node paths measure with font padding on and no base
+        // padding beyond the stroke inset.
+        setIncludeFontPadding(true);
+        setPadding(0, 0, 0, 0);
         setFontSize(14f);
     }
 
@@ -101,7 +107,9 @@ public class StrokedTextView extends AppCompatTextView {
     }
 
     private float getScaledSize(float size) {
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, size, getResources().getDisplayMetrics());
+        // Same density source as RN's text measurement (TextAttributeProps),
+        // not the per-view display metrics.
+        return PixelUtil.toPixelFromDIP(size);
     }
 
     private int parseColor(String color) {
