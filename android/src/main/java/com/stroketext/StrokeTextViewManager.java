@@ -1,6 +1,7 @@
 package com.stroketext;
 
 import androidx.annotation.Nullable;
+import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewManagerDelegate;
@@ -36,6 +37,17 @@ public class StrokeTextViewManager extends SimpleViewManager<StrokedTextView> im
     }
 
     @Override
+    public StrokeTextShadowNode createShadowNodeInstance() {
+        return new StrokeTextShadowNode();
+    }
+
+    @Override
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public Class<LayoutShadowNode> getShadowNodeClass() {
+        return (Class) StrokeTextShadowNode.class;
+    }
+
+    @Override
     @ReactProp(name = "text")
     public void setText(StrokedTextView view, @Nullable String text) {
         view.setText(text);
@@ -44,7 +56,7 @@ public class StrokeTextViewManager extends SimpleViewManager<StrokedTextView> im
     @Override
     @ReactProp(name = "fontSize")
     public void setFontSize(StrokedTextView view, float fontSize) {
-        view.setTextSize(fontSize);
+        view.setFontSize(fontSize);
     }
 
     @Override

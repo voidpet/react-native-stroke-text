@@ -18,8 +18,11 @@ yarn add @voidpet/react-native-stroke-text
 ```
 
 ## Android
-min ```compileSdkVersion``` is required to be ```34```
+
+min `compileSdkVersion` is required to be `34`
+
 ## iOS
+
 Go to your ios folder and run:
 
 ```
@@ -49,15 +52,16 @@ export default function Screen() {
     </View>
   );
 }
-
 ```
 
 ### Props
 
 The following table outlines the props available for the `StrokeText` component:
 
+`StrokeText` is density-scaled only and does not respond to the operating system's font-size accessibility setting. The `fontSize` prop uses density-independent points, keeping drawing and measurement consistent at every device font scale.
+
 | Prop            | Type    | Description                                                     |
-|-----------------|---------|-----------------------------------------------------------------|
+| --------------- | ------- | --------------------------------------------------------------- |
 | `text`          | string  | The text content you want to display.                           |
 | `fontSize`      | number  | Size of the text font, defining how large the text will be.     |
 | `color`         | string  | Color of the text, can use any valid color format.              |
@@ -74,9 +78,9 @@ The following table outlines the props available for the `StrokeText` component:
 ```jsx
 <StrokeText
   text="Lorem ipsum"
-    width={150} // +
-    ellipsis={true} // +
-    numberOfLines={1} // +
+  width={150} // +
+  ellipsis={true} // +
+  numberOfLines={1} // +
   fontSize={32}
   color="#FFFFFF"
   strokeColor="#000000"
@@ -84,7 +88,6 @@ The following table outlines the props available for the `StrokeText` component:
   fontFamily="Nunito-Black"
   align="center"
 />
-
 ```
 
 <h1 align="center">
@@ -103,7 +106,7 @@ module.exports = {
     ios: {},
     android: {},
   },
-  assets: ['/assets/fonts'], // or './src/assets/fonts'
+  assets: ["/assets/fonts"], // or './src/assets/fonts'
 };
 ```
 
@@ -112,7 +115,6 @@ module.exports = {
 ```tsx
 import { useFonts } from "expo-font";
 import { Dosis_400Regular } from "@expo-google-fonts/dosis";
-
 
 const [fontsLoaded, fontError] = useFonts({
   Danfo: require("./src/assets/fonts/Danfo-Regular.ttf"),

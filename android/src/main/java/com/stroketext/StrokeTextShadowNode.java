@@ -89,48 +89,53 @@ class StrokeTextShadowNode extends LayoutShadowNode implements YogaMeasureFuncti
         }
 
         Typeface typeface = FontUtil.getFont(context, fontFamily);
-        float scaledFontSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, fontSize, context.getResources().getDisplayMetrics());
-        float strokeWidthPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, strokeWidth, context.getResources().getDisplayMetrics());
+        float scaledFontSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, fontSize, context.getResources().getDisplayMetrics());
+        float strokeWidthPx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, strokeWidth, context.getResources().getDisplayMetrics());
 
         textPaint.setTypeface(typeface);
         textPaint.setTextSize(scaledFontSize);
 
+        float totalStrokeInset = strokeWidthPx * 2;
+        float contentWidthPx;
         float widthPx;
         if (widthMode == YogaMeasureMode.EXACTLY) {
             widthPx = width;
+            contentWidthPx = Math.max(0, width - totalStrokeInset);
         } else {
             float maxLineWidth = 0;
             String[] lines = text.split("\n");
             for (String line : lines) {
                 maxLineWidth = Math.max(maxLineWidth, textPaint.measureText(line));
             }
-            widthPx = maxLineWidth + strokeWidthPx;
+            contentWidthPx = maxLineWidth;
+            widthPx = contentWidthPx + totalStrokeInset;
             if (widthMode == YogaMeasureMode.AT_MOST) {
                 widthPx = Math.min(widthPx, width);
+                contentWidthPx = Math.max(0, widthPx - totalStrokeInset);
             }
         }
 
-        if (widthPx <= 0) {
+        if (widthPx <= 0 || contentWidthPx <= 0) {
             return YogaMeasureOutput.make(0, 0);
         }
 
-        int layoutWidth = (int) Math.ceil(widthPx);
+        int layoutWidth = (int) Math.ceil(contentWidthPx);
         CharSequence ellipsizedText = ellipsis
                 ? TextUtils.ellipsize(text, textPaint, layoutWidth, TextUtils.TruncateAt.END)
                 : text;
 
-        StaticLayout textLayout = new StaticLayout(ellipsizedText, textPaint, layoutWidth, alignment, 1.0f, 0.0f, false);
+        StaticLayout textLayout = new StaticLayout(ellipsizedText, textPaint, layoutWidth, alignment, 1.0f, 0.0f, true);
         if (numberOfLines > 0 && numberOfLines < textLayout.getLineCount()) {
             int lineEnd = textLayout.getLineEnd(numberOfLines - 1);
             CharSequence trimmed = ellipsizedText.subSequence(0, lineEnd);
-            textLayout = new StaticLayout(trimmed, textPaint, layoutWidth, alignment, 1.0f, 0.0f, false);
+            textLayout = new StaticLayout(trimmed, textPaint, layoutWidth, alignment, 1.0f, 0.0f, true);
         }
 
         float heightPx;
         if (heightMode == YogaMeasureMode.EXACTLY) {
             heightPx = height;
         } else {
-            heightPx = textLayout.getHeight();
+            heightPx = textLayout.getHeight() + totalStrokeInset;
             if (heightMode == YogaMeasureMode.AT_MOST) {
                 heightPx = Math.min(heightPx, height);
             }
